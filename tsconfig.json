@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"esModuleInterop": true,
+		"allowUmdGlobalAccess": true,
+		"baseUrl": ".",
+		"paths": {
+			"@com/*": ["src/*"]
+		}
+	}
+}
