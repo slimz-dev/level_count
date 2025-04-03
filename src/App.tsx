@@ -80,10 +80,13 @@ const App: React.FC = () => {
 		e.preventDefault();
 		if (!formData.name || !formData.ingame || formData.levelBase <= 0 || formData.expBase <= 0)
 			return;
-		if (formData.levelBase < HUYEN_TIEN_LEVEL) {
+		if (
+			formData.levelBase < HUYEN_TIEN_LEVEL ||
+			formData.levelBase > TIEN_QUAN_LAST_LEVEL + 100
+		) {
 			Swal.fire({
 				title: 'Error!',
-				text: `Tính từ lv 756 thôi`,
+				text: `Range only from lv 756 to lv 1600`,
 				icon: 'error',
 			});
 		} else {
@@ -100,7 +103,6 @@ const App: React.FC = () => {
 			}
 			do {
 				expLeft = expLeft - (expCurrentLevel + step * i);
-				console.log('exp left ', i, expLeft);
 				if (
 					currentLevel + i === HUYEN_TIEN_LAST_LEVEL ||
 					currentLevel + i === KIM_TIEN_LAST_LEVEL ||
@@ -233,43 +235,48 @@ const App: React.FC = () => {
 				</form>
 			</div>
 			{data.length > 0 && (
-				<div className="mt-6">
+				<div className="mt-6 max-sm:w-full  ">
 					<h3 className="text-xl font-semibold text-center text-gray-800 mb-4">
-						Submitted Data
+						KPI table
 					</h3>
-					<table className="w-full table-auto border-collapse border border-gray-300 shadow-md">
-						<thead>
-							<tr className="bg-blue-500 text-white">
-								<th className="px-4 py-2 border">ID</th>
-								<th className="px-4 py-2 border">Name</th>
-								<th className="px-4 py-2 border">Ingame</th>
-								<th className="px-4 py-2 border">Level Base</th>
-								<th className="px-4 py-2 border">Exp Base</th>
-								<th className="px-4 py-2 border">Expected Level</th>
-								<th className="px-4 py-2 border">
-									<FontAwesomeIcon icon={faTrash} />
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{data.map((item, index) => (
-								<tr key={index} className="text-center border-b hover:bg-gray-100">
-									<td className="px-4 py-2">{index + 1}</td>
-									<td className="px-4 py-2">{item.name}</td>
-									<td className="px-4 py-2">{item.ingame}</td>
-									<td className="px-4 py-2">{item.levelBase}</td>
-									<td className="px-4 py-2">{item.expBase}</td>
-									<td className="px-4 py-2">{item.expectedLevel}</td>
-									<td
-										onClick={() => handleDelete(index)}
-										className="px-4 cursor-pointer py-2 border"
-									>
+					<div className="w-full overflow-auto">
+						<table className=" w-full table-auto border-collapse border border-gray-300 shadow-md">
+							<thead>
+								<tr className="bg-blue-500 text-white">
+									<th className="px-4 py-2 border">ID</th>
+									<th className="px-4 py-2 border">Name</th>
+									<th className="px-4 py-2 border">Ingame</th>
+									<th className="px-4 py-2 border">Level Base</th>
+									<th className="px-4 py-2 border">Exp Base</th>
+									<th className="px-4 py-2 border">Expected Level</th>
+									<th className="px-4 py-2 border">
 										<FontAwesomeIcon icon={faTrash} />
-									</td>
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{data.map((item, index) => (
+									<tr
+										key={index}
+										className="text-center border-b hover:bg-gray-100"
+									>
+										<td className="px-4 py-2">{index + 1}</td>
+										<td className="px-4 py-2">{item.name}</td>
+										<td className="px-4 py-2">{item.ingame}</td>
+										<td className="px-4 py-2">{item.levelBase}</td>
+										<td className="px-4 py-2">{item.expBase}</td>
+										<td className="px-4 py-2">{item.expectedLevel}</td>
+										<td
+											onClick={() => handleDelete(index)}
+											className="px-4 cursor-pointer py-2 border"
+										>
+											<FontAwesomeIcon icon={faTrash} />
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 					<button
 						onClick={exportToExcel}
 						className="mt-4 bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out w-full"
